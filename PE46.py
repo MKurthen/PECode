@@ -1,21 +1,9 @@
-from math import floor,ceil, sqrt
 import time
-starttime = time.time()
+from math import sqrt, ceil
+StartTime = time.time()
 
-limit = 10000000# upper limit for numbers to be searched for primes
 
-"""
-#Eratosthenes Sieve - finds all prime numbers up to a limit, returns them as list 'primes'
-#8.5s for limit = 100k
-primes = [2, 3]
-PrimeNumber = [True] * ((limit//2)-1)
-while True in PrimeNumber:
-  x = PrimeNumber.index(True)
-  y = x*2 + 5
-  primes.append(y)
-  for i in range((x), len(PrimeNumber), y):
-    PrimeNumber[i] = False
-"""
+limit = 1000000
 
 #Atkins Sieve
 #0.3s for limit = 100k, 2.8s for limit = 1M
@@ -42,5 +30,27 @@ for n in range(5,limit):
 	if PrimeNumber[n-1]:
 		PrimeNumbers.append(n)
 
+#square numbers until 1M
+Squares = list()
+for i in range(1,int(ceil(limit))):
+	Squares.append(i**2)
 
-print (time.time() -starttime), "seconds"
+for i in range(1,int(limit/2)):
+	if j %100 == 0:
+		print(j)
+	j = 2*i +1
+	if j in PrimeNumbers:
+		continue
+	candidate = True
+	for k in Squares:
+		if (j - 2*k) in PrimeNumbers:
+			candidate = False
+			break
+		if (j-2*k) < 0:
+			break
+	if candidate:
+		print(j)
+		break
+
+print (time.time() -StartTime), "seconds"
+
