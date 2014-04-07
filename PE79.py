@@ -1,3 +1,8 @@
+#0.002s, HOWEVER if one digit would occur twice in the combination, this approach would NOT work
+#Explanation: for each 3-digit attempt, create a tuple of each 2 digits((1st,2nd),(1st,3rd),(2nd,3rd)) in the order they appear
+#	then, for each digit that appears in the login-attempts, look up which digits appear before (and after),
+#		by this way determine where to insert each digit in the combination
+
 from time import time
 
 StartTime = time()
@@ -15,27 +20,8 @@ Combination = Attempts[0]
 Orders = []
 for Attempt in Attempts:
 	Digit0 = Attempt[0]
-	FirstDigitIn = [[],[]]
-	for i in range(len(Attempts)):
-		CompAttempt = Attempts[i]
-		for j in range(len(CompAttempt)):
-			if CompAttempt[j] == Digit0:
-				FirstDigitIn[0].append(i)
-				FirstDigitIn[1].append(j)
 	Digit1 = Attempt[1]
-	SecondDigitIn = list()
-	for i in range(len(Attempts)):
-		CompAttempt = Attempts[i]
-		for j in range(len(CompAttempt)):
-			if CompAttempt[j] == Digit1:
-				SecondDigitIn.append([i,j])
 	Digit2 = Attempt[2]
-	ThirdDigitIn = list()
-	for i in range(len(Attempts)):
-		CompAttempt = Attempts[i]
-		for j in range(len(CompAttempt)):
-			if CompAttempt[j] == Digit2:
-				ThirdDigitIn.append([i,j])
 	if ([Digit0,Digit1] not in Orders):
 		Orders.append([Digit0,Digit1])
 	if ([Digit0,Digit2] not in Orders):
@@ -62,44 +48,15 @@ while not Flag:
 		DigitsBeforeDigit =  set()
 		DigitsAfterDigit = set()
 		for ComparisonOrder in Orders:
-			if ComparisonOrder[0] == Digit:
-				DigitsAfterDigit.add(ComparisonOrder[1])
+#			if ComparisonOrder[0] == Digit:
+#				DigitsAfterDigit.add(ComparisonOrder[1])
 			if ComparisonOrder[1] == Digit:
 				DigitsBeforeDigit.add(ComparisonOrder[0])
 		InsertIndex = 0
-		for Digit in DigitsBeforeDigit:
-			if Digit in Combination:
-				InsertIndex = max(InsertIndex, Combination.index(Digit))
-		Combination.insert((InsertIndex+1),Digit)
-		print(Combination)
-"""
-#for every digit in TryCombination:
-#	if 2 digits found in reverseOrder in another attempt:
-#		
+		for ComparisonDigit in DigitsBeforeDigit:
+			if ComparisonDigit in Combination:
+				InsertIndex = max(InsertIndex, Combination.index(ComparisonDigit)+1)
+		Combination.insert((InsertIndex),Digit)
 
-TryCombination = Attempts[0]
-	Digit0 = TryCombination[0]
-	FirstDigitIn = [[],[]]
-	for i in range(len(Attempts)):
-		CompAttempt = Attempts[i]
-		for j in range(len(CompAttempt)):
-			if CompAttempt[j] == Digit0:
-				FirstDigitIn[0].append(i)
-				FirstDigitIn[1].append(j)
-	Digit1 = TryCombination[1]
-	SecondDigitIn = list()
-	for i in range(len(Attempts)):
-		CompAttempt = Attempts[i]
-		for j in range(len(CompAttempt)):
-			if CompAttempt[j] == Digit1:
-				SecondDigitIn.append([i,j])
-	Digit2 = Attempt[2]
-	ThirdDigitIn = list()
-	for i in range(len(Attempts)):
-		CompAttempt = Attempts[i]
-		for j in range(len(CompAttempt)):
-			if CompAttempt[j] == Digit2:
-Combination = Attempts[0]
-for Attempt in Attempts:
-				ThirdDigitIn.append([i,j])
-"""
+print('Combination is ', ''.join(str(i) for i in Combination))
+print(time()-StartTime, 'seconds')
